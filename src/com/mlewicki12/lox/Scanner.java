@@ -73,20 +73,7 @@ public class Scanner {
                 if(match('/')) {
                     while(peek() != '\n' && !isAtEnd()) advance();
                 } else if(match('*')) {
-                    while(peek() != '*' && !isAtEnd()) {                                                    // same code as string, make sure we account for new lines
-                        if(peek() == '\n') line++;
-                        advance();
-                    }
-
-                    if(isAtEnd()) {
-                        break;                                                                              // kill the scanner if the comment doesn't close
-                                                                                                            // doesn't particularly need to be an error
-                    }
-
-                    advance();                                                                              // swallow the closing *
-                    if(!match('/')) {
-                        Lox.error(line, "unterminated comment, expected /");
-                    }
+                    multiline();
                 } else {
                     addToken(TokenType.SLASH);
                 }
@@ -152,6 +139,34 @@ public class Scanner {
         TokenType type = keywords.get(text);
         if(type == null) type = TokenType.IDENTIFIER;
         addToken(type);
+    }
+
+    private boolean multiline() {
+        while(peek() != '*' && !isAtEnd()) {                                // same code as string, make sure we account for new lines
+            if(peek() == '\n') line++;
+            if(match('/')) {                                        // nested multiline comment
+                if(match('*')) {
+                    boolean test = multiline();
+                    if (!test) {                                                 // if we failed run it up the line
+                        return false;
+                    }
+                }
+            }
+            advance();
+        }
+
+        if(isAtEnd()) {
+            return false;                                                   // kill the scanner if the comment doesn't close
+                                                                            // doesn't particularly need to be an error, but
+                                                                            // return false so we can ensure proper behaviour for multiline
+        }
+
+        advance();                                                          // swallow the closing *
+        if(!match('/')) {
+            return multiline();                                             // if there's no closing / we continue processing the comment
+        }
+
+        return true;
     }
 
     private boolean isAtEnd() {
