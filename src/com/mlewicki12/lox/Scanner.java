@@ -72,6 +72,21 @@ public class Scanner {
             case '/':                                                                                       // special behaviour for comment
                 if(match('/')) {
                     while(peek() != '\n' && !isAtEnd()) advance();
+                } else if(match('*')) {
+                    while(peek() != '*' && !isAtEnd()) {                                                    // same code as string, make sure we account for new lines
+                        if(peek() == '\n') line++;
+                        advance();
+                    }
+
+                    if(isAtEnd()) {
+                        break;                                                                              // kill the scanner if the comment doesn't close
+                                                                                                            // doesn't particularly need to be an error
+                    }
+
+                    advance();                                                                              // swallow the closing *
+                    if(!match('/')) {
+                        Lox.error(line, "unterminated comment, expected /");
+                    }
                 } else {
                     addToken(TokenType.SLASH);
                 }
