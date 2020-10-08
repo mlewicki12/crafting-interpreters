@@ -2,6 +2,8 @@
 package com.mlewicki12.lox;
 
 public class AstPrinter implements Expr.Visitor<String> {
+    private final boolean rpn = true;
+
     public static void main(String[] args) {
         Expr expression = new Expr.Binary(
             new Expr.Unary(
@@ -25,12 +27,12 @@ public class AstPrinter implements Expr.Visitor<String> {
 
     @Override
     public String visitBinaryExpr(Expr.Binary expr) {
-        return parenthesize(expr.operator.lexeme, expr.left, expr.right);
+        return parenthesize(expr.operator.lexeme, rpn, expr.left, expr.right);
     }
 
     @Override
     public String visitGroupingExpr(Expr.Grouping expr) {
-        return parenthesize("group", expr.expression);
+        return parenthesize("group", rpn, expr.expression);
     }
 
     @Override
@@ -41,11 +43,21 @@ public class AstPrinter implements Expr.Visitor<String> {
 
     @Override
     public String visitUnaryExpr(Expr.Unary expr) {
-        return parenthesize(expr.operator.lexeme, expr.right);
+        return parenthesize(expr.operator.lexeme, rpn, expr.right);
     }
 
-    private String parenthesize(String name, Expr... exprs) {
+    private String parenthesize(String name, boolean rpn, Expr... exprs) {
         StringBuilder builder = new StringBuilder();
+
+        if(rpn) {
+            for(Expr expr : exprs) {
+                builder.append(expr.accept(this));
+                builder.append(" ");
+            }
+
+            builder.append(name);
+            return builder.toString();
+        }
 
         builder.append("(").append(name);
         for(Expr expr : exprs) {
