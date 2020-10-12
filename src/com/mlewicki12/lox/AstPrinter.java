@@ -2,7 +2,7 @@
 package com.mlewicki12.lox;
 
 public class AstPrinter implements Expr.Visitor<String> {
-    private final boolean rpn = true;
+    private boolean rpn = true;
 
     public static void main(String[] args) {
         Expr expression = new Expr.Binary(
@@ -22,6 +22,11 @@ public class AstPrinter implements Expr.Visitor<String> {
     }
 
     String print(Expr expr) {
+        return expr.accept(this);
+    }
+
+    String print(Expr expr, boolean rpn) {
+        this.rpn = rpn;
         return expr.accept(this);
     }
 

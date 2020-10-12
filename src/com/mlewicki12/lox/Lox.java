@@ -48,13 +48,24 @@ public class Lox {
         Scanner scanner = new Scanner(source);      // create a scanner object
         List<Token> tokens = scanner.scanTokens();  // scan the source into tokens
 
-        for(Token token : tokens) {                 // print out the scanned tokens
-            System.out.println(token);
-        }
+        Parser parser = new Parser(tokens);         // create a new parser and parse the input
+        Expr expression = parser.parse();
+
+        if(hadError) return;                        // make sure we don't print if there was an error
+
+        System.out.println(new AstPrinter().print(expression, false));
     }
 
     static void error(int line, String message) {
         report(line, "", message);
+    }
+
+    static void error(Token token, String message) {
+        if(token.type == TokenType.EOF) {
+            report(token.line, " at end", message);
+        } else {
+            report(token.line, " at " + token.lexeme, message);
+        }
     }
 
     private static void report(int line, String where, String message) {
