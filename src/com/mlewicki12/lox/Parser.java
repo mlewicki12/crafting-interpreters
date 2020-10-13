@@ -22,7 +22,32 @@ public class Parser {
     }
 
     private Expr expression() {
-        return equality();              // an expression just contains an equality so go to that
+        return comma();              // an expression just contains a comma so go to that
+    }
+
+    private Expr comma() {
+        Expr expr = conditional();
+
+        while(match(TokenType.COMMA)) {
+            Token operator = previous();    // technically shouldn't be needed, but the token will have more relevant info
+            Expr right = conditional();
+            expr = new Expr.Binary(expr, operator, right);
+        }
+
+        return expr;
+    }
+
+    private Expr conditional() {
+        Expr expr = equality();
+
+        while(match(TokenType.QUESTION_MARK)) {                             // structure right now should be equality ( ? conditional : conditional )*
+            Expr left = conditional();
+            consume(TokenType.COLON, "expected ':' after '?'");
+            Expr right = conditional();
+            expr = new Expr.Ternary(expr, left, right);
+        }
+
+        return expr;
     }
 
     private Expr equality() {

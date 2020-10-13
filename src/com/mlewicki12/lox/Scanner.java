@@ -63,6 +63,8 @@ public class Scanner {
             case '+': addToken(TokenType.PLUS); break;
             case ';': addToken(TokenType.SEMICOLON); break;
             case '*': addToken(TokenType.STAR); break;
+            case '?': addToken(TokenType.QUESTION_MARK); break;
+            case ':': addToken(TokenType.COLON); break;
 
             case '!': addToken(match('=') ? TokenType.BANG_EQUAL : TokenType.BANG); break;          // possible two character tokens
             case '=': addToken(match('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL); break;
