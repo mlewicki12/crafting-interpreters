@@ -28,7 +28,7 @@ public class Parser {
     private Expr errorprod() {
         if(match(TokenType.COMMA, TokenType.QUESTION_MARK, TokenType.COLON, TokenType.BANG_EQUAL,
                  TokenType.EQUAL_EQUAL, TokenType.GREATER, TokenType.GREATER_EQUAL, TokenType.LESS, TokenType.LESS_EQUAL,
-                 TokenType.MINUS, TokenType.PLUS, TokenType.SLASH, TokenType.STAR)) {
+                 TokenType.PLUS, TokenType.SLASH, TokenType.STAR)) {
             throw error(previous(), "expected expression");         // this doesn't parse the next expression, I think I would have to do something
                                                                             // in the try catch in parse for that
         } else {
