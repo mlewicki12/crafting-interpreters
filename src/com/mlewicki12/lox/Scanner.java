@@ -30,6 +30,7 @@ public class Scanner {
         keywords.put("true",    TokenType.TRUE);
         keywords.put("var",     TokenType.VAR);
         keywords.put("while",   TokenType.WHILE);
+        keywords.put("exit",    TokenType.EXIT);
     }
 
     private int start = 0;

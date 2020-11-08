@@ -7,6 +7,11 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import java.util.HashMap;
 
 public class OperatorMap {
+    /*
+     * this is an iffy solution that uses a double hashmap to assign a tuple of types to operators
+     * I was messing around with a linked list of types and hashmaps for each operator, but that feels excessive
+     * right now, especially since this works
+     */
     private final HashMap<StringTuple, HashMap<String, Operator>> map = new HashMap<>();
 
     OperatorMap() {
@@ -84,8 +89,6 @@ public class OperatorMap {
         } else {
             return; // throw error
         }
-
-        System.out.println(map.get(key));
     }
 
     private boolean isTruthy(Object value) {

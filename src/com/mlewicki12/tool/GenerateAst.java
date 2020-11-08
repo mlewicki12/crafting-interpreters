@@ -20,7 +20,8 @@ public class GenerateAst {
                 "Binary     :   Expr left, Token operator, Expr right",
                 "Grouping   :   Expr expression",
                 "Literal    :   Object value",
-                "Unary      :   Token operator, Expr right"
+                "Unary      :   Token operator, Expr right",
+                "Exit       :   Token exit"    // the way it's structured rn, each Expr needs a token, so I'm giving it the actual exit call
         ));
     }
 

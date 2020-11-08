@@ -46,6 +46,12 @@ public class Interpreter implements Expr.Visitor<Object> {
         } else return evaluate(expr.right);
     }
 
+    @Override
+    public Object visitExitExpr(Expr.Exit expr) {
+        System.exit(0); // not an error, so I should be able to get away with system code 0
+        return null; // maybe it's not needed here, but at least i'll appease the java compiler
+    }
+
     private Object evaluate(Expr expr) {
         return expr.accept(this);
     }

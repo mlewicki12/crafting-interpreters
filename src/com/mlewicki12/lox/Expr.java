@@ -12,6 +12,7 @@ abstract class Expr {
         R visitGroupingExpr(Grouping expr);
         R visitLiteralExpr(Literal expr);
         R visitUnaryExpr(Unary expr);
+        R visitExitExpr(Exit expr);
     }
 
     static class Ternary extends Expr {
@@ -86,6 +87,19 @@ abstract class Expr {
         @Override
         <R> R accept(Visitor<R> visitor) {
             return visitor.visitUnaryExpr(this);
+        }
+    }
+
+    static class Exit extends Expr {
+        final Token exit;
+
+        Exit(Token exit) {
+            this.exit = exit;
+        }
+
+        @Override
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitExitExpr(this);
         }
     }
 

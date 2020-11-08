@@ -123,6 +123,7 @@ public class Parser {
         if(match(TokenType.TRUE)) return new Expr.Literal(true);
         if(match(TokenType.FALSE)) return new Expr.Literal(false);
         if(match(TokenType.NIL)) return new Expr.Literal(null);
+        if(match(TokenType.EXIT)) return new Expr.Exit(previous());
 
         if(match(TokenType.NUMBER, TokenType.STRING)) {
             return new Expr.Literal(previous().literal);
